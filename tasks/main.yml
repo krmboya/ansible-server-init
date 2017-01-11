@@ -1,0 +1,24 @@
+---
+- name: Create user
+  user: name={{ user }} password={{ password }} shell=/bin/bash
+        generate_ssh_key=yes
+
+- name: Adds authorized ssh keys for user login
+  copy: src=authorized_keys
+        dest="/home/{{ user }}/.ssh/authorized_keys"
+        owner="{{ user }}" mode=0400
+
+- name: Update APT package cache
+  action: apt update_cache=yes
+
+- name: Upgrade APT to the lastest packages
+  action: apt upgrade=safe
+
+- name: restart machine
+  command: shutdown -r now "Ansible updates triggered"
+  async: 0
+  poll: 0
+  ignore_errors: true
+
+- name: waiting for server to come back
+  local_action: wait_for host="{{ inventory_hostname }}" port=22 delay=1 timeout=300
