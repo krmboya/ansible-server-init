@@ -1,5 +1,5 @@
 # ansible-server-init
-Initializes a newly provisioned server with a non-root user and latest system 
+Initializes a newly provisioned ubuntu server with a non-root user and latest system 
 updates
 
 Variables required are:
