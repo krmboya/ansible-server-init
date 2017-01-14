@@ -3,10 +3,17 @@
   user: name={{ user }} password={{ password }} shell=/bin/bash
         generate_ssh_key=yes
 
+- name: Created user should own home directory
+  file: state=directory path="/home/{{ user }}" owner={{ user }} group={{ user }}
+
 - name: Add authorized ssh keys for user login
   copy: src=authorized_keys
         dest="/home/{{ user }}/.ssh/authorized_keys"
         owner="{{ user }}" mode=0400
+
+- name: Add created user to sudoers
+  lineinfile: dest=/etc/sudoers regexp="{{ user }} ALL" line="{{ user }} ALL=(ALL) ALL"
+              state=present validate='visudo -cf %s'
 
 - name: Update APT package cache
   action: apt update_cache=yes
