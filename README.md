@@ -11,3 +11,5 @@ Variables required are:
 
 In addition, a file `authorized_keys` needs to be provided under the `files` directory
 containing ssh public keys for persons authorized to log in as the created user
+
+An example playbook `init-server.example.yml` that uses this role is provided.
